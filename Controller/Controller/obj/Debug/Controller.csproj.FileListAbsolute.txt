@@ -1,0 +1,16 @@
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\Controller.exe.config
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\Controller.exe
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\Controller.pdb
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\AIPFramework.dll
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\SimpleJson.dll
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\SocketIO.dll
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\SuperSocket.ClientEngine.Common.dll
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\SuperSocket.ClientEngine.Core.dll
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\SuperSocket.ClientEngine.Protocol.dll
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\WebSocket4Net.dll
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\obj\Debug\Controller.csprojResolveAssemblyReference.cache
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\obj\Debug\Controller.exe
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\obj\Debug\Controller.pdb
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\InputSimulator.dll
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\InputSimulator.pdb
+C:\Users\Kiean\Documents\controller\Augment-Game-Controller\Controller\Controller\bin\Debug\InputSimulator.xml
