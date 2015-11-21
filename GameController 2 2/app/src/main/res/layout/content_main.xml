@@ -60,22 +60,20 @@
     </RelativeLayout>-->
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="0dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginRight="300dp">
+        android:id="@+id/joystickLayout"
+        android:background="@drawable/joystick">
 
-        <ImageButton
+        <!--<ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/stick"
+            android:id="@+id/joystick"
             android:layout_centerInParent="true"
-            android:scaleType="fitCenter"
-            android:background="@drawable/joystick"/>
+            android:scaleType="fitCenter"/>-->
 
         </RelativeLayout>
 
@@ -85,10 +83,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="0dp">
-        <!--android:layout_marginLeft="300dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="0dp">-->
 
         <ImageButton
             android:layout_width="wrap_content"

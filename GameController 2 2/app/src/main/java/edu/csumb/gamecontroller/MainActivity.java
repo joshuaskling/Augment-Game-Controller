@@ -11,15 +11,26 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import org.json.JSONObject;
+
+import java.sql.Time;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
     private IOSocket socket;
     private SensorManager mSensorManager;
+
+    //Time now = new Time();
+    //now.setToNow();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +43,62 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         setContentView(R.layout.activity_main);
 
-        //final Button firebutton = (Button) findViewById(R.id.fireButton);
         final ImageButton button1 = (ImageButton) findViewById(R.id.button1);
         final ImageButton button2 = (ImageButton) findViewById(R.id.button2);
         final ImageButton button3 = (ImageButton) findViewById(R.id.button3);
         final ImageButton button4 = (ImageButton) findViewById(R.id.button4);
 
-        button1.setOnTouchListener(
-                new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        sendFire("btn1");
-                        //Log.i("AIPSERVER", "Message sent to server: fire!");
-                        return true;
+
+
+        //setContentView(R.layout.main);
+        final RelativeLayout textView = (RelativeLayout)findViewById(R.id.joystickLayout);
+        // this is the view on which you will listen for touch events
+        final View touchView = findViewById(R.id.joystickLayout);
+
+        touchView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                //textView.setText("Touch coordinates : " +
+                //        String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
+                float x = (event.getX()-250);
+                float y = (event.getY()-250);
+
+                if (Math.abs(x) < 250 && Math.abs(y) < 250) {
+                    //System.out.println("X: " + x + " Y: " + y);
+                    sendMovement(x, y);
+                }
+                return true;
+            }
+        });
+
+        //stick drag stuff
+        //final ImageButton joystick = (ImageButton) findViewById(R.id.stick);
+        /*
+        joystick.setOnTouchListener(new View.OnTouchListener()
+        {
+
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                if (event.getAction() == MotionEvent.ACTION_MOVE )
+                {
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(v.getWidth(),  v.getHeight());
+                    params.setMargins((int)event.getRawX() - v.getWidth()/2, (int)(event.getRawY() - v.getHeight()), (int)event.getRawX() - v.getWidth()/2, (int)(event.getRawY() - v.getHeight()));
+                    v.setLayoutParams(params);
+                }
+                return false;
+            }
+        });*/
+
+            button1.setOnTouchListener(
+                    new View.OnTouchListener()
+
+            {
+                @Override
+                public boolean onTouch (View v, MotionEvent event){
+                sendFire("btn1");
+                //Log.i("AIPSERVER", "Message sent to server: fire!");
+                return true;
                     }
                 }
         );
@@ -80,34 +134,13 @@ public class MainActivity extends Activity implements SensorEventListener {
                 }
         );
 
-        //stick listeners
-
-
-
-        /*final SeekBar speedSlider = (SeekBar) findViewById(R.id.speed);
-
-        speedSlider.setOnSeekBarChangeListener(
-                new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        sendSpeed(progress);
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-
-                    }
-                }
-        );*/
-
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
     }
+
+
+    //stick listeners
+
 
     @Override
     protected void onResume() {
@@ -159,42 +192,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 
-    /*void sendFire() {
-        // get the angle around the z-axis rotated
-        try {
-
-            JSONObject message = new JSONObject(new String("{}"));
-
-            if (socket.isConnected()) {
-                socket.emit("fire", message);
-                //Log.i("AIPSERVER", "Message sent to server: fire!");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }*/
-
-    /*void sendSpeed(int speed) {
-        try {
-
-            JSONObject message = new JSONObject(new String("{speed:"+ speed/10f+"}"));
-
-            if (socket.isConnected()) {
-                socket.emit("speed", message);
-                Log.i("AIPSERVER", "Message sent to server: speed");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }*/
-
     void sendOrientation(float deltaAlpha, float deltaBeta, float deltaGamma) {
         try {
-
 
             String messageContent = new String("{alpha: "+deltaAlpha+ ",beta: " + deltaBeta +", gamma:" + deltaGamma+ "}");
 
@@ -203,6 +202,25 @@ public class MainActivity extends Activity implements SensorEventListener {
             if (socket.isConnected()) {
                 socket.emit("orientation", message);
                 //Log.i("AIPSERVER", "Message sent to server: " + message.getString("alpha"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    void sendMovement(float x, float y) {
+        try {
+
+            String messageContent = new String("{x: "+x+ ",y: " + y + "}");
+
+            JSONObject message = new JSONObject(messageContent);
+
+            if (socket.isConnected()) {
+                socket.emit("movement", message);
+                //Log.i("AIPSERVER", "Message sent to server: " + message.getString("movement"));
+                System.out.println("X: " + x + " Y: " + y);
             }
 
         } catch (Exception e) {
