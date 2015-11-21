@@ -80,6 +80,10 @@ public class MainActivity extends Activity implements SensorEventListener {
                 }
         );
 
+        //stick listeners
+
+
+
         /*final SeekBar speedSlider = (SeekBar) findViewById(R.id.speed);
 
         speedSlider.setOnSeekBarChangeListener(
@@ -198,7 +202,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             if (socket.isConnected()) {
                 socket.emit("orientation", message);
-                Log.i("AIPSERVER", "Message sent to server: " + message.getString("alpha"));
+                //Log.i("AIPSERVER", "Message sent to server: " + message.getString("alpha"));
             }
 
         } catch (Exception e) {

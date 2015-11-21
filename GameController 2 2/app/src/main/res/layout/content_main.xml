@@ -80,14 +80,15 @@
         </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="300dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="0dp">
+        <!--android:layout_marginLeft="300dp"
         android:layout_marginBottom="0dp"
         android:layout_marginTop="0dp"
-        android:layout_marginRight="0dp">
+        android:layout_marginRight="0dp">-->
 
         <ImageButton
             android:layout_width="wrap_content"
