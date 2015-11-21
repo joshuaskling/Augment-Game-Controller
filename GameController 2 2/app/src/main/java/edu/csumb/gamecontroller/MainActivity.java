@@ -1,6 +1,7 @@
 package edu.csumb.gamecontroller;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 
 import org.json.JSONObject;
@@ -23,13 +25,20 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //set orientation to landscape
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         connect();
 
         setContentView(R.layout.activity_main);
 
-        final Button firebutton = (Button) findViewById(R.id.fireButton);
+        //final Button firebutton = (Button) findViewById(R.id.fireButton);
+        final ImageButton button1 = (ImageButton) findViewById(R.id.button1);
+        final ImageButton button2 = (ImageButton) findViewById(R.id.button2);
+        final ImageButton button3 = (ImageButton) findViewById(R.id.button3);
+        final ImageButton button4 = (ImageButton) findViewById(R.id.button4);
 
-        firebutton.setOnTouchListener(
+        button1.setOnTouchListener(
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -45,7 +54,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         );
 
-        final SeekBar speedSlider = (SeekBar) findViewById(R.id.speed);
+        /*final SeekBar speedSlider = (SeekBar) findViewById(R.id.speed);
 
         speedSlider.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
@@ -64,7 +73,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
                     }
                 }
-        );
+        );*/
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -110,7 +119,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             if (socket.isConnected()) {
                 socket.emit("fire", message);
-                Log.i("AIPSERVER", "Message sent to server: fire!");
+                //Log.i("AIPSERVER", "Message sent to server: fire!");
             }
 
         } catch (Exception e) {
@@ -119,7 +128,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 
-    void sendSpeed(int speed) {
+    /*void sendSpeed(int speed) {
         try {
 
             JSONObject message = new JSONObject(new String("{speed:"+ speed/10f+"}"));
@@ -133,7 +142,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
     void sendOrientation(float deltaAlpha, float deltaBeta, float deltaGamma) {
         try {
