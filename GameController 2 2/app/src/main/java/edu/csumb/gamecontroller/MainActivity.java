@@ -42,16 +42,42 @@ public class MainActivity extends Activity implements SensorEventListener {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-
-                        sendFire();
-                        Log.i("AIPSERVER", "Message sent to server: fire!");
-
-
+                        sendFire("btn1");
+                        //Log.i("AIPSERVER", "Message sent to server: fire!");
                         return true;
-
                     }
                 }
+        );
 
+        button2.setOnTouchListener(
+                new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        sendFire("btn2");
+                        //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        return true;
+                    }
+                }
+        );
+        button3.setOnTouchListener(
+                new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        sendFire("btn3");
+                        //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        return true;
+                    }
+                }
+        );
+        button4.setOnTouchListener(
+                new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        sendFire("btn4");
+                        //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        return true;
+                    }
+                }
         );
 
         /*final SeekBar speedSlider = (SeekBar) findViewById(R.id.speed);
@@ -101,7 +127,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        sendOrientation(event.values[0],event.values[1], event.values[2]);
+        sendOrientation(event.values[0], event.values[1], event.values[2]);
         // get the angle around the z-axis rotated
 
     }
@@ -111,7 +137,25 @@ public class MainActivity extends Activity implements SensorEventListener {
         // not in use
     }
 
-    void sendFire() {
+    void sendFire(String input) {
+        // get the angle around the z-axis rotated
+        try {
+
+            JSONObject message = new JSONObject(new String("{}"));
+
+            if (socket.isConnected()) {
+                socket.emit(input, message);
+                //Log.i("AIPSERVER", "Message sent to server: fire!");
+                System.out.println(input);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /*void sendFire() {
         // get the angle around the z-axis rotated
         try {
 
@@ -126,7 +170,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
     /*void sendSpeed(int speed) {
         try {
