@@ -28,7 +28,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private IOSocket socket;
     private SensorManager mSensorManager;
-
+    long time = System.currentTimeMillis();
+    long buttonTimer = System.currentTimeMillis();
     //Time now = new Time();
     //now.setToNow();
 
@@ -48,8 +49,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         final ImageButton button3 = (ImageButton) findViewById(R.id.button3);
         final ImageButton button4 = (ImageButton) findViewById(R.id.button4);
 
-
-
         //setContentView(R.layout.main);
         final RelativeLayout textView = (RelativeLayout)findViewById(R.id.joystickLayout);
         // this is the view on which you will listen for touch events
@@ -64,51 +63,40 @@ public class MainActivity extends Activity implements SensorEventListener {
                 float x = (event.getX()-250);
                 float y = (event.getY()-250);
 
-                if (Math.abs(x) < 250 && Math.abs(y) < 250) {
+                //time = System.currentTimeMillis();
+                //System.out.println(time);
+                if (Math.abs(x) < 250 && Math.abs(y) < 250 && System.currentTimeMillis() - time > 100) {
                     //System.out.println("X: " + x + " Y: " + y);
                     sendMovement(x, y);
+                    time = System.currentTimeMillis();
                 }
                 return true;
             }
         });
 
-        //stick drag stuff
-        //final ImageButton joystick = (ImageButton) findViewById(R.id.stick);
-        /*
-        joystick.setOnTouchListener(new View.OnTouchListener()
-        {
-
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                if (event.getAction() == MotionEvent.ACTION_MOVE )
-                {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(v.getWidth(),  v.getHeight());
-                    params.setMargins((int)event.getRawX() - v.getWidth()/2, (int)(event.getRawY() - v.getHeight()), (int)event.getRawX() - v.getWidth()/2, (int)(event.getRawY() - v.getHeight()));
-                    v.setLayoutParams(params);
-                }
-                return false;
-            }
-        });*/
-
-            button1.setOnTouchListener(
-                    new View.OnTouchListener()
-
-            {
-                @Override
-                public boolean onTouch (View v, MotionEvent event){
-                sendFire("btn1");
-                //Log.i("AIPSERVER", "Message sent to server: fire!");
-                return true;
+        button1.setOnTouchListener(
+                new View.OnTouchListener(){
+                    @Override
+                    public boolean onTouch (View v, MotionEvent event){
+                        if (System.currentTimeMillis() - buttonTimer > 200) {
+                            sendFire("btn1");
+                            buttonTimer = System.currentTimeMillis();
+                            //Log.i("AIPSERVER", "Message sent to server: fire!");
+                            //System.out.println("btn1");
+                        }
+                    return true;
                     }
                 }
         );
-
         button2.setOnTouchListener(
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        sendFire("btn2");
-                        //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        if (System.currentTimeMillis() - buttonTimer > 200) {
+                            sendFire("btn2");
+                            buttonTimer = System.currentTimeMillis();
+                            //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        }
                         return true;
                     }
                 }
@@ -117,8 +105,11 @@ public class MainActivity extends Activity implements SensorEventListener {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        sendFire("btn3");
-                        //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        if (System.currentTimeMillis() - buttonTimer > 200) {
+                            sendFire("btn3");
+                            buttonTimer = System.currentTimeMillis();
+                            //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        }
                         return true;
                     }
                 }
@@ -127,8 +118,11 @@ public class MainActivity extends Activity implements SensorEventListener {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        sendFire("btn4");
-                        //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        if (System.currentTimeMillis() - buttonTimer > 200) {
+                            sendFire("btn4");
+                            buttonTimer = System.currentTimeMillis();
+                            //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        }
                         return true;
                     }
                 }
@@ -218,9 +212,9 @@ public class MainActivity extends Activity implements SensorEventListener {
             JSONObject message = new JSONObject(messageContent);
 
             if (socket.isConnected()) {
-                socket.emit("movement", message);
+                socket.emit("joystick", message);
                 //Log.i("AIPSERVER", "Message sent to server: " + message.getString("movement"));
-                System.out.println("X: " + x + " Y: " + y);
+                //System.out.println("X: " + x + " Y: " + y);
             }
 
         } catch (Exception e) {
