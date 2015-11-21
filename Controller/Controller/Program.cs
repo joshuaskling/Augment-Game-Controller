@@ -151,7 +151,7 @@ public class AccRead
         private void processMessage(string msg)
         {
             JsonObject obj = (JsonObject)SimpleJson.SimpleJson.DeserializeObject(msg);
-            //print(obj);
+            //Console.WriteLine(obj);
 
             object name = null;
             object args = null;
@@ -161,16 +161,20 @@ public class AccRead
             object selected = null;
             object mx = null;
             object my = null;
+            object btn1 = null;
+            object btn2 = null;
+            object btn3 = null;
+            object btn4 = null;
 
             if (obj != null)
             {
                 if (obj.TryGetValue("name", out name))
                 {
+
                     if (name != null)
                     {
                         if (name.ToString().Equals("orientation"))
                         {
-
 
                             obj.TryGetValue("args", out args);
 
@@ -199,6 +203,7 @@ public class AccRead
                                 az = float.Parse(gamma.ToString());
                             }
 
+
                             //Console.WriteLine(ax + " " + ay + " " + az);
                             //acceleration = new Vector3(Mathf.Deg2Rad * ax, Mathf.Deg2Rad * ay, Mathf.Deg2Rad * az);
 
@@ -207,12 +212,12 @@ public class AccRead
                         if (name.ToString().Equals("speed"))
                         {
 
-
                             obj.TryGetValue("args", out args);
 
                             JsonArray jsonArray = (JsonArray)SimpleJson.SimpleJson.DeserializeObject(args.ToString());
                             JsonObject speedValue = (JsonObject)SimpleJson.SimpleJson.DeserializeObject(jsonArray[0].ToString());
 
+                            
 
                             speedValue.TryGetValue("speed", out alpha);
                             
@@ -224,19 +229,35 @@ public class AccRead
                                 //speed = float.Parse(alpha.ToString());
                             }
 
+
                         }
 
                         if (name.ToString().Equals("fire"))
                         {
-                            InputSimulator.SimulateKeyPress(VirtualKeyCode.SPACE);
-                            fire = true;
+                            Console.WriteLine("Fire");
+                            //InputSimulator.SimulateKeyPress(VirtualKeyCode.SPACE);
+                            //fire = true;
 
                         }
-
+                        if(name.ToString().Equals("btn1"))
+                        {
+                            Console.WriteLine("It works");
+                        }
+                        if(name.ToString().Equals("btn2"))
+                        {
+                            Console.WriteLine("It works 2");
+                        }
+                        if(name.ToString().Equals("btn3"))
+                        {
+                            Console.WriteLine("It works 3");
+                        }
+                        if(name.ToString().Equals("btn4"))
+                        {
+                            Console.WriteLine("It works 4");
+                        }
                     }
                 }
             }
-
         }
 
         //Processes the message and invoke callback or event.
