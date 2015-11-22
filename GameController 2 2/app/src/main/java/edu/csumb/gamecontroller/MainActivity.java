@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (System.currentTimeMillis() - time > 50) {
+                if (System.currentTimeMillis() - time > 100) {
 
                     //textView.setText("Touch coordinates : " +
                     //        String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
