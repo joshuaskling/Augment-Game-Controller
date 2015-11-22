@@ -2,6 +2,7 @@ package edu.csumb.gamecontroller;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.hardware.Sensor;
@@ -15,6 +16,8 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 
 import org.json.JSONObject;
@@ -51,10 +54,39 @@ public class MainActivity extends Activity implements SensorEventListener {
         final ImageButton button3 = (ImageButton) findViewById(R.id.button3);
         final ImageButton button4 = (ImageButton) findViewById(R.id.button4);
 
+        //radio buttons
+        final RadioButton radio1 = (RadioButton) findViewById(R.id.radioButton1);
+        final RadioButton radio2 = (RadioButton) findViewById(R.id.radioButton2);
+        final RadioButton radio3 = (RadioButton) findViewById(R.id.radioButton3);
+
         //setContentView(R.layout.main);
         final RelativeLayout textView = (RelativeLayout)findViewById(R.id.joystickLayout);
         // this is the view on which you will listen for touch events
         final View touchView = findViewById(R.id.joystickLayout);
+
+        final RelativeLayout bgElement = (RelativeLayout) findViewById(R.id.background);
+
+        //radio controls
+        radio1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bgElement.setBackgroundResource(R.drawable.nes_controller);
+            }
+        });
+
+        radio2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bgElement.setBackgroundResource(R.drawable.xbox);
+            }
+        });
+
+        radio3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bgElement.setBackgroundResource(R.drawable.wood_texture);
+            }
+        });
 
         //joystick controls
         touchView.setOnTouchListener(new View.OnTouchListener() {
