@@ -21,7 +21,7 @@ public class AccRead
     public static bool fire;
     private const string ARRAY_FLAG = "[";
 
-
+    
 
 
     static void Main()
@@ -154,8 +154,8 @@ public class AccRead
         private void processMessage(string msg)
         {
             JsonObject obj = (JsonObject)SimpleJson.SimpleJson.DeserializeObject(msg);
-            Console.WriteLine(obj);
-
+            //Console.WriteLine(obj);
+            const int delay = 150;
             object name = null;
             object args = null;
             object alpha = null;
@@ -169,6 +169,8 @@ public class AccRead
             object btn3 = null;
             object btn4 = null;
             object joystick = null;
+
+            
            
             if (obj != null)
             {
@@ -200,13 +202,15 @@ public class AccRead
                                 ay = float.Parse(beta.ToString());
                             }
 
-                            gyroValues.TryGetValue("gamma", out gamma);
+                            //gyroValues.TryGetValue("gamma", out gamma);
 
-                            if (gamma != null)
-                            {
-                                az = float.Parse(gamma.ToString());
-                            }
+                            //if (gamma != null)
+                            //{
+                            //    az = float.Parse(gamma.ToString());
+                            //}
+                            //Console.WriteLine("X:" + ax + " , Y:" + ay);
 
+                            //Console.WriteLine(ax + " " + ay + " " + az);
 
                             //Console.WriteLine(ax + " " + ay + " " + az);
                             //acceleration = new Vector3(Mathf.Deg2Rad * ax, Mathf.Deg2Rad * ay, Mathf.Deg2Rad * az);
@@ -244,29 +248,103 @@ public class AccRead
                             JsonArray jsonArray = (JsonArray)SimpleJson.SimpleJson.DeserializeObject(args.ToString());
                             JsonObject directionValue = (JsonObject)SimpleJson.SimpleJson.DeserializeObject(jsonArray[0].ToString());
 
-                            directionValue.TryGetValue("direction", out joystick);
-                            if (joystick.ToString().Equals("left")) {
-                                
-                                // Simulates press and release of the Left key
-                                InputSimulator.SimulateKeyDown(VirtualKeyCode.LEFT);
-                                System.Threading.Thread.Sleep(400);
-                                InputSimulator.SimulateKeyUp(VirtualKeyCode.LEFT);
-                            }
-                            if (joystick.ToString().Equals("right"))
-                            {
-                                // Simulates press and release of the Right key
-                                InputSimulator.SimulateKeyDown(VirtualKeyCode.RIGHT);
-                                System.Threading.Thread.Sleep(400);
-                                InputSimulator.SimulateKeyUp(VirtualKeyCode.RIGHT);
+                            directionValue.TryGetValue("x", out mx);
+                            directionValue.TryGetValue("y", out my);
 
+                            if(mx != null && my != null) {
+                                float xaxis, yaxis;
+                                xaxis = float.Parse(mx.ToString());
+                                yaxis = float.Parse(my.ToString());
+                                //Console.WriteLine("X:" + xaxis + ", Y:" + yaxis);
+                                if(xaxis > 66 && yaxis > 66)
+                                {
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.RIGHT);
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.UP);
+                                    System.Threading.Thread.Sleep(delay);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.RIGHT);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.UP);
+                                    Console.WriteLine("Right AND Up were pressed");
+                                }
+                                else if(xaxis < -66 && yaxis > 66)
+                                {
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.LEFT);
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.UP);
+                                    System.Threading.Thread.Sleep(delay);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.LEFT);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.UP);
+                                    Console.WriteLine("Left AND Up were pressed");
+                                }
+                                else if ( xaxis < -66 && yaxis < -66)
+                                {
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.LEFT);
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.DOWN);
+                                    System.Threading.Thread.Sleep(delay);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.LEFT);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.DOWN);
+                                    Console.WriteLine("Left AND Down were pressed");
+                                }
+                                else if (xaxis > 66 && yaxis < -66)
+                                {
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.RIGHT);
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.DOWN);
+                                    System.Threading.Thread.Sleep(delay);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.RIGHT);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.DOWN);
+                                    Console.WriteLine("Right AND Down were pressed");
+                                }
+
+                                else if(xaxis >=-66 && xaxis <= 66 && yaxis > 0 )
+                                {
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.UP);
+                                    System.Threading.Thread.Sleep(delay);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.UP);
+                                    Console.WriteLine("Up was pressed");
+                                }
+                                else if (xaxis >= -66 && xaxis <= 66 && yaxis < 0)
+                                {
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.DOWN);
+                                    System.Threading.Thread.Sleep(delay);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.DOWN);
+                                    Console.WriteLine("Down was pressed");
+                                }
+                                else if (yaxis >= -66 && yaxis <= 66 && xaxis > 0)
+                                {
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.RIGHT);
+                                    System.Threading.Thread.Sleep(delay);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.RIGHT);
+                                    Console.WriteLine("Right was pressed");
+                                }
+                                else if (yaxis >= -66 && yaxis <= 66 && xaxis < 0)
+                                {
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.LEFT);
+                                    System.Threading.Thread.Sleep(delay);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.LEFT);
+                                    Console.WriteLine("Left was pressed");
+                                }
                             }
-                            if (joystick.ToString().Equals("stop"))
-                            {
-                                // Simulates press and release of the Up key
-                                InputSimulator.SimulateKeyDown(VirtualKeyCode.UP);
-                                System.Threading.Thread.Sleep(400);
-                                InputSimulator.SimulateKeyUp(VirtualKeyCode.UP);
-                            }
+
+                            //if (joystick.ToString().Equals("left")) {
+                                
+                            //    // Simulates press and release of the Left key
+                            //    InputSimulator.SimulateKeyDown(VirtualKeyCode.LEFT);
+                            //    System.Threading.Thread.Sleep(400);
+                            //    InputSimulator.SimulateKeyUp(VirtualKeyCode.LEFT);
+                            //}
+                            //if (joystick.ToString().Equals("right"))
+                            //{
+                            //    // Simulates press and release of the Right key
+                            //    InputSimulator.SimulateKeyDown(VirtualKeyCode.RIGHT);
+                            //    System.Threading.Thread.Sleep(400);
+                            //    InputSimulator.SimulateKeyUp(VirtualKeyCode.RIGHT);
+
+                            //}
+                            //if (joystick.ToString().Equals("stop"))
+                            //{
+                            //    // Simulates press and release of the Up key
+                            //    InputSimulator.SimulateKeyDown(VirtualKeyCode.UP);
+                            //    System.Threading.Thread.Sleep(400);
+                            //    InputSimulator.SimulateKeyUp(VirtualKeyCode.UP);
+                            //}
                         }  
                         // X Button
                         if (name.ToString().Equals("btn1"))
@@ -297,7 +375,6 @@ public class AccRead
                             // Simulates press and release of the D key
                             InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_D);
                             InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_D);
-
 
                         }
                         // A Button
