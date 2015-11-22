@@ -3,6 +3,7 @@ package edu.csumb.gamecontroller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,6 +11,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -33,6 +35,13 @@ public class MainActivity extends Activity implements SensorEventListener {
         //set orientation to landscape
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+        //get size of screen
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        final int screenWidth = size.x;
+        final int screenHeight = size.y;
+
         connect();
 
         setContentView(R.layout.activity_main);
@@ -47,40 +56,24 @@ public class MainActivity extends Activity implements SensorEventListener {
         // this is the view on which you will listen for touch events
         final View touchView = findViewById(R.id.joystickLayout);
 
+        //joystick controls
         touchView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                //if (System.currentTimeMillis() - time > 200) {
+                if (System.currentTimeMillis() - time > 50) {
 
-                //textView.setText("Touch coordinates : " +
-                //        String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
-                //float x = (event.getX() - 250);
-                //float y = (event.getY() - 250);
-
-                //time = System.currentTimeMillis();
-                //System.out.println(time);
-                //System.out.println("X: " + x + " Y: " + y);
-
-
-
-            if (event.getX() - 250 > 0) {
-                send2dMovement("right");
-            } else if (event.getX() - 250 < 0) {
-                send2dMovement("left");
-            }
-
-                time = System.currentTimeMillis();
-                            //sendMovement(x, y);
-                            //time = System.currentTimeMillis();
-
-                        //}
-
-
-
-                    return true;
+                    //textView.setText("Touch coordinates : " +
+                    //        String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
+                    //float x = (event.getRawX() - 250);
+                    //float y = (event.getRawY() - 250);
+                    float x = (event.getRawX()-(screenWidth/5));
+                    float y = (event.getRawY()-(screenHeight/2))*-1;
+                    sendMovement(x, y);
+                    time = System.currentTimeMillis();
                 }
-
+                return true;
+            }
         });
 
         button1.setOnTouchListener(
@@ -90,7 +83,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                         //darken button when pressed
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN: {
-                                button1.setBackgroundResource(R.drawable.x_button_small_pressed);
+                                //button1.setBackgroundResource(R.drawable.x_button_small_pressed);
                                 vibrator.vibrate(30);
                                 sendFire("btn1", "down");
                                 //Log.i("AIPSERVER", "Message sent to server: fire!");
@@ -99,7 +92,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                             case MotionEvent.ACTION_UP: {
                                 //v.getBackground().clearColorFilter();
                                 //v.invalidate();
-                                button1.setImageResource(R.drawable.x_button_small);
+                                //button1.setImageResource(R.drawable.x_button_small);
                                 sendFire("btn1", "up");
                                 break;
                             }
@@ -226,9 +219,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         }
         */
 
-        if (System.currentTimeMillis()-time > 500){
+        /*if (System.currentTimeMillis()-time > 500){
             send2dMovement("stop");
-        }
+        }*/
     }
 
     @Override
