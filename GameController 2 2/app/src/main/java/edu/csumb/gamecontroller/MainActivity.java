@@ -21,8 +21,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private IOSocket socket;
     private SensorManager mSensorManager;
-    long time = System.currentTimeMillis();
-    long positionTimer = System.currentTimeMillis();
+    static long time = System.currentTimeMillis();
+    //long positionTimer = System.currentTimeMillis();
     public static Vibrator vibrator;
 
     @Override
@@ -50,22 +50,36 @@ public class MainActivity extends Activity implements SensorEventListener {
         touchView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (System.currentTimeMillis() - time > 200) {
 
-                    //textView.setText("Touch coordinates : " +
-                    //        String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
-                    float x = (event.getX() - 250);
-                    float y = (event.getY() - 250);
+                //if (System.currentTimeMillis() - time > 200) {
 
-                    //time = System.currentTimeMillis();
-                    //System.out.println(time);
-                        //System.out.println("X: " + x + " Y: " + y);
-                        sendMovement(x, y);
-                        time = System.currentTimeMillis();
+                //textView.setText("Touch coordinates : " +
+                //        String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
+                //float x = (event.getX() - 250);
+                //float y = (event.getY() - 250);
 
-                }
-                return true;
+                //time = System.currentTimeMillis();
+                //System.out.println(time);
+                //System.out.println("X: " + x + " Y: " + y);
+
+
+
+            if (event.getX() - 250 > 0) {
+                send2dMovement("right");
+            } else if (event.getX() - 250 < 0) {
+                send2dMovement("left");
             }
+
+                time = System.currentTimeMillis();
+                            //sendMovement(x, y);
+                            //time = System.currentTimeMillis();
+
+                        //}
+
+
+
+                    return true;
+                }
 
         });
 
@@ -76,7 +90,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                         //darken button when pressed
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN: {
-                                //button1.setBackgroundResource(R.drawable.x_button_small_pressed);
+                                button1.setBackgroundResource(R.drawable.x_button_small_pressed);
                                 vibrator.vibrate(30);
                                 sendFire("btn1", "down");
                                 //Log.i("AIPSERVER", "Message sent to server: fire!");
@@ -85,7 +99,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                             case MotionEvent.ACTION_UP: {
                                 //v.getBackground().clearColorFilter();
                                 //v.invalidate();
-                                //button1.setImageResource(R.drawable.x_button_small);
+                                button1.setImageResource(R.drawable.x_button_small);
                                 sendFire("btn1", "up");
                                 break;
                             }
@@ -202,12 +216,19 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
+
+        //position resources COMMENT OUT FOR SENSOR CHANGES
+        /*
         if (System.currentTimeMillis()-positionTimer > 200) {
             sendOrientation(event.values[0], event.values[1], event.values[2]);
             // get the angle around the z-axis rotated
             positionTimer = System.currentTimeMillis();
         }
+        */
 
+        if (System.currentTimeMillis()-time > 500){
+            send2dMovement("stop");
+        }
     }
 
     @Override
@@ -252,6 +273,22 @@ public class MainActivity extends Activity implements SensorEventListener {
                 e.printStackTrace();
             }
 
+    }
+
+    void send2dMovement(String direction){
+        try{
+            String messageContent = new String("{direction: " + direction + "}");
+            JSONObject message = new JSONObject(messageContent);
+
+            if (socket.isConnected()) {
+                socket.emit("joystick", message);
+                //Log.i("AIPSERVER", "Message sent to server: " + message.getString("movement"));
+                System.out.println(direction);
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     void sendMovement(float x, float y) {
