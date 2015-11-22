@@ -1,41 +1,34 @@
 package edu.csumb.gamecontroller;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
-import android.widget.Toast;
 
 import org.json.JSONObject;
-
-import java.sql.Time;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
     private IOSocket socket;
     private SensorManager mSensorManager;
     long time = System.currentTimeMillis();
-    long buttonTimer = System.currentTimeMillis();
-    //Time now = new Time();
-    //now.setToNow();
+    long positionTimer = System.currentTimeMillis();
+    public static Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
         //set orientation to landscape
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -57,32 +50,45 @@ public class MainActivity extends Activity implements SensorEventListener {
         touchView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (System.currentTimeMillis() - time > 200) {
 
-                //textView.setText("Touch coordinates : " +
-                //        String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
-                float x = (event.getX()-250);
-                float y = (event.getY()-250);
+                    //textView.setText("Touch coordinates : " +
+                    //        String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
+                    float x = (event.getX() - 250);
+                    float y = (event.getY() - 250);
 
-                //time = System.currentTimeMillis();
-                //System.out.println(time);
-                if (Math.abs(x) < 250 && Math.abs(y) < 250 && System.currentTimeMillis() - time > 100) {
-                    //System.out.println("X: " + x + " Y: " + y);
-                    sendMovement(x, y);
-                    time = System.currentTimeMillis();
+                    //time = System.currentTimeMillis();
+                    //System.out.println(time);
+                        //System.out.println("X: " + x + " Y: " + y);
+                        sendMovement(x, y);
+                        time = System.currentTimeMillis();
+
                 }
                 return true;
             }
+
         });
 
         button1.setOnTouchListener(
                 new View.OnTouchListener(){
                     @Override
                     public boolean onTouch (View v, MotionEvent event){
-                        if (System.currentTimeMillis() - buttonTimer > 200) {
-                            sendFire("btn1");
-                            buttonTimer = System.currentTimeMillis();
-                            //Log.i("AIPSERVER", "Message sent to server: fire!");
-                            //System.out.println("btn1");
+                        //darken button when pressed
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN: {
+                                //button1.setBackgroundResource(R.drawable.x_button_small_pressed);
+                                vibrator.vibrate(30);
+                                sendFire("btn1", "down");
+                                //Log.i("AIPSERVER", "Message sent to server: fire!");
+                                break;
+                            }
+                            case MotionEvent.ACTION_UP: {
+                                //v.getBackground().clearColorFilter();
+                                //v.invalidate();
+                                //button1.setImageResource(R.drawable.x_button_small);
+                                sendFire("btn1", "up");
+                                break;
+                            }
                         }
                     return true;
                     }
@@ -92,10 +98,22 @@ public class MainActivity extends Activity implements SensorEventListener {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        if (System.currentTimeMillis() - buttonTimer > 200) {
-                            sendFire("btn2");
-                            buttonTimer = System.currentTimeMillis();
-                            //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        //darken button when pressed
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN: {
+                                //v.getBackground().setColorFilter(0xe0f47521, PorterDuff.Mode.SRC_ATOP);
+                                //v.invalidate();
+                                vibrator.vibrate(30);
+                                sendFire("btn2", "down");
+                                //Log.i("AIPSERVER", "Message sent to server: fire!");
+                                break;
+                            }
+                            case MotionEvent.ACTION_UP: {
+                                //v.getBackground().clearColorFilter();
+                                //v.invalidate();
+                                sendFire("btn2", "down");
+                                break;
+                            }
                         }
                         return true;
                     }
@@ -105,11 +123,25 @@ public class MainActivity extends Activity implements SensorEventListener {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        if (System.currentTimeMillis() - buttonTimer > 200) {
-                            sendFire("btn3");
-                            buttonTimer = System.currentTimeMillis();
-                            //Log.i("AIPSERVER", "Message sent to server: fire!");
+
+                        //darken button when pressed
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN: {
+                                //v.getBackground().setColorFilter(0xe0f47521, PorterDuff.Mode.SRC_ATOP);
+                                //v.invalidate();
+                                vibrator.vibrate(30);
+                                sendFire("btn3", "down");
+                                //Log.i("AIPSERVER", "Message sent to server: fire!");
+                                break;
+                            }
+                            case MotionEvent.ACTION_UP: {
+                                //v.getBackground().clearColorFilter();
+                                //v.invalidate();
+                                sendFire("btn3", "up");
+                                break;
+                            }
                         }
+
                         return true;
                     }
                 }
@@ -118,10 +150,22 @@ public class MainActivity extends Activity implements SensorEventListener {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        if (System.currentTimeMillis() - buttonTimer > 200) {
-                            sendFire("btn4");
-                            buttonTimer = System.currentTimeMillis();
-                            //Log.i("AIPSERVER", "Message sent to server: fire!");
+                        //darken button when pressed
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN: {
+                                //v.getBackground().setColorFilter(0xe0f47521, PorterDuff.Mode.SRC_ATOP);
+                                //v.invalidate();
+                                vibrator.vibrate(30);
+                                sendFire("btn4", "down");
+                                //Log.i("AIPSERVER", "Message sent to server: fire!");
+                                break;
+                            }
+                            case MotionEvent.ACTION_UP: {
+                                //v.getBackground().clearColorFilter();
+                                //v.invalidate();
+                                sendFire("btn4", "up");
+                                break;
+                            }
                         }
                         return true;
                     }
@@ -158,8 +202,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        sendOrientation(event.values[0], event.values[1], event.values[2]);
-        // get the angle around the z-axis rotated
+        if (System.currentTimeMillis()-positionTimer > 200) {
+            sendOrientation(event.values[0], event.values[1], event.values[2]);
+            // get the angle around the z-axis rotated
+            positionTimer = System.currentTimeMillis();
+        }
 
     }
 
@@ -168,11 +215,11 @@ public class MainActivity extends Activity implements SensorEventListener {
         // not in use
     }
 
-    void sendFire(String input) {
+    void sendFire(String input, String state) {
         // get the angle around the z-axis rotated
         try {
 
-            JSONObject message = new JSONObject(new String("{}"));
+            JSONObject message = new JSONObject(new String("{state: " + state + "}"));
 
             if (socket.isConnected()) {
                 socket.emit(input, message);
@@ -187,20 +234,23 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     void sendOrientation(float deltaAlpha, float deltaBeta, float deltaGamma) {
-        try {
 
-            String messageContent = new String("{alpha: "+deltaAlpha+ ",beta: " + deltaBeta +", gamma:" + deltaGamma+ "}");
 
-            JSONObject message = new JSONObject(messageContent);
+            try {
 
-            if (socket.isConnected()) {
-                socket.emit("orientation", message);
-                //Log.i("AIPSERVER", "Message sent to server: " + message.getString("alpha"));
+                String messageContent = new String("{alpha: " + deltaAlpha + ",beta: " + deltaBeta + ", gamma:" + deltaGamma + "}");
+
+                JSONObject message = new JSONObject(messageContent);
+
+                if (socket.isConnected()) {
+                    socket.emit("orientation", message);
+                    Log.i("AIPSERVER", "Message sent to server: " + message.getString("alpha"));
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -214,7 +264,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             if (socket.isConnected()) {
                 socket.emit("joystick", message);
                 //Log.i("AIPSERVER", "Message sent to server: " + message.getString("movement"));
-                //System.out.println("X: " + x + " Y: " + y);
+                System.out.println("X: " + x + " Y: " + y);
             }
 
         } catch (Exception e) {
