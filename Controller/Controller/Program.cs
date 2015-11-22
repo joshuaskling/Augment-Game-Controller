@@ -1,11 +1,16 @@
-﻿using System.Collections;
+﻿using System.Runtime.InteropServices;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using SimpleJson;
 using System;
 using SocketIOClient;
 using System.IO;
 using System.Collections;
 using WindowsInput;
+
+using System.Linq;
+using System.Text;
 
 public class AccRead
 {
@@ -16,16 +21,14 @@ public class AccRead
     public static bool fire;
     private const string ARRAY_FLAG = "[";
 
+
+
+
     static void Main()
     {
         Start();
-        /*
-        while (true)
-        {
-            System.Threading.Thread.Sleep(5000);
-            InputSimulator.SimulateKeyPress(VirtualKeyCode.SPACE);
-        }
-        */
+
+
     }
 
     // Use this for initialization
@@ -151,7 +154,7 @@ public class AccRead
         private void processMessage(string msg)
         {
             JsonObject obj = (JsonObject)SimpleJson.SimpleJson.DeserializeObject(msg);
-            //Console.WriteLine(obj);
+            Console.WriteLine(obj);
 
             object name = null;
             object args = null;
@@ -165,7 +168,8 @@ public class AccRead
             object btn2 = null;
             object btn3 = null;
             object btn4 = null;
-
+            object joystick = null;
+           
             if (obj != null)
             {
                 if (obj.TryGetValue("name", out name))
@@ -217,19 +221,14 @@ public class AccRead
                             JsonArray jsonArray = (JsonArray)SimpleJson.SimpleJson.DeserializeObject(args.ToString());
                             JsonObject speedValue = (JsonObject)SimpleJson.SimpleJson.DeserializeObject(jsonArray[0].ToString());
 
-                            
-
                             speedValue.TryGetValue("speed", out alpha);
-                            
+
                             if (alpha != null)
                             {
-                                //Console.WriteLine("Slider value: " + (float)alpha);
                                 //float alphaVal = (float)alpha;
                                 //Console.WriteLine("Slider value: " + alpha.ToString());
                                 //speed = float.Parse(alpha.ToString());
                             }
-
-
                         }
 
                         if (name.ToString().Equals("fire"))
@@ -239,26 +238,88 @@ public class AccRead
                             //fire = true;
 
                         }
-                        if(name.ToString().Equals("btn1"))
+                        if(name.ToString().Equals("joystick"))
                         {
-                            Console.WriteLine("It works");
-                        }
-                        if(name.ToString().Equals("btn2"))
+                            obj.TryGetValue("args", out args);
+                            JsonArray jsonArray = (JsonArray)SimpleJson.SimpleJson.DeserializeObject(args.ToString());
+                            JsonObject directionValue = (JsonObject)SimpleJson.SimpleJson.DeserializeObject(jsonArray[0].ToString());
+
+                            directionValue.TryGetValue("direction", out joystick);
+                            if (joystick.ToString().Equals("left")) {
+                                
+                                // Simulates press and release of the Left key
+                                InputSimulator.SimulateKeyDown(VirtualKeyCode.LEFT);
+                                System.Threading.Thread.Sleep(400);
+                                InputSimulator.SimulateKeyUp(VirtualKeyCode.LEFT);
+                            }
+                            if (joystick.ToString().Equals("right"))
+                            {
+                                // Simulates press and release of the Right key
+                                InputSimulator.SimulateKeyDown(VirtualKeyCode.RIGHT);
+                                System.Threading.Thread.Sleep(400);
+                                InputSimulator.SimulateKeyUp(VirtualKeyCode.RIGHT);
+
+                            }
+                            if (joystick.ToString().Equals("stop"))
+                            {
+                                // Simulates press and release of the Up key
+                                InputSimulator.SimulateKeyDown(VirtualKeyCode.UP);
+                                System.Threading.Thread.Sleep(400);
+                                InputSimulator.SimulateKeyUp(VirtualKeyCode.UP);
+                            }
+                        }  
+                        // X Button
+                        if (name.ToString().Equals("btn1"))
                         {
-                            Console.WriteLine("It works 2");
+                            Console.WriteLine("X Button pressed");
+                            //System.Threading.Thread.Sleep(400);
+                            // Simulates press and release of the Return key
+                            InputSimulator.SimulateKeyDown(VirtualKeyCode.RETURN);
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.RETURN);
+
                         }
-                        if(name.ToString().Equals("btn3"))
+                        // B Button
+                        if (name.ToString().Equals("btn2"))
                         {
-                            Console.WriteLine("It works 3");
+                            Console.WriteLine("B button pressed");
+
+                            //System.Threading.Thread.Sleep(400);
+                            // Simulates press and release of the C key
+                            InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_C);
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_C);
+
+
                         }
-                        if(name.ToString().Equals("btn4"))
+                        // Y Button
+                        if (name.ToString().Equals("btn3"))
                         {
-                            Console.WriteLine("It works 4");
+                            Console.WriteLine("Y button pressed");
+                            // Simulates press and release of the D key
+                            InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_D);
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_D);
+
+
                         }
+                        // A Button
+                        if (name.ToString().Equals("btn4"))
+                        {
+                            Console.WriteLine("A button pressed");
+                            //System.Threading.Thread.Sleep(400);
+
+                            // Simulates press and release of the X key
+                            InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_X);
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_X);
+
+                        }
+
                     }
                 }
             }
+
         }
+
+
+
 
         //Processes the message and invoke callback or event.
         private void processMessageBatch(string msgs)
@@ -270,8 +331,5 @@ public class AccRead
                 this.processMessage(jsonArray[i].ToString());
             }
         }
-
-
     }
-
 }
